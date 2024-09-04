@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja de Sanduíches</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin: 0;
+            padding: 0;
+            background-color: #0056b3;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #d3d3d3;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .menu-item h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .menu-item span {
+            font-size: 1.2rem;
+            color: #007bff;
+            margin: 0.5rem 0;
+        }
+        .menu-item button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .menu-item button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 768px) {
+            nav ul li {
+                display: block;
+                margin: 0.5rem 0;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Loja de Sanduíches</h1>
+        <nav>
+            <ul>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="#comentarios">Comentários</a></li>
+                <li><a href="carrinho.html" class="cart-link">Carrinho</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <section id="menu">
+            <h2>Menu de Sanduíches</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <h3>Sanduíche Clássico</h3>
+                    <span>R$ 12,00</span>
+                    <button onclick="addToCart('Sanduíche Clássico', 12.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="menu-item">
+                    <h3>Sanduíche Vegetariano</h3>
+                    <span>R$ 15,00</span>
+                    <button onclick="addToCart('Sanduíche Vegetariano', 15.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="menu-item">
+                    <h3>Sanduíche Especial</h3>
+                    <span>R$ 20,00</span>
+                    <button onclick="addToCart('Sanduíche Especial', 20.00)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Adicione mais itens do menu conforme necessário -->
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Loja de Sanduíches. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemIndex = cart.findIndex(item => item.name === name);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`${name} adicionado ao carrinho!`);
+        }
+    </script>
+</body>
+</html>

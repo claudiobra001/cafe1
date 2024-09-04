@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin: 0;
+            padding: 0;
+            background-color: #495057;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #d3d3d3;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item span {
+            display: block;
+            margin-right: 1rem;
+        }
+        .cart-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .cart-item button:hover {
+            background-color: #c82333;
+        }
+        .cart-summary {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            margin: 2rem 0;
+            transition: background-color 0.3s;
+        }
+        .whatsapp-button:hover {
+            background-color: #1ebe56;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Carrinho de Compras</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Menu</a></li>
+                <li><a href="carrinho.html" class="cart-link">Carrinho</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <section id="carrinho">
+            <h2>Itens no Carrinho</h2>
+            <div id="cart-items"></div>
+            <div class="cart-summary" id="cart-summary">Total: R$ 0,00</div>
+            <button class="whatsapp-button" onclick="sendWhatsApp()">Enviar pelo WhatsApp</button>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Loja de Sanduíches. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function updateCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name} - R$ ${item.price.toFixed(2)} x ${item.quantity}</span>
+                        <button onclick="removeFromCart('${item.name}')">Remover</button>
+                    </div>
+                `;
+            });
+
+            cartSummary.textContent = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        function removeFromCart(name) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemIndex = cart.findIndex(item => item.name === name);
+            if (itemIndex > -1) {
+                if (cart[itemIndex].quantity > 1) {
+                    cart[itemIndex].quantity -= 1;
+                } else {
+                    cart.splice(itemIndex, 1);
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCart();
+            }
+        }
+
+        function sendWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let message = 'Olá, gostaria de fazer o seguinte pedido:\n\n';
+
+            cart.forEach(item => {
+                message += `${item.name} - R$ ${item.price.toFixed(2)} x ${item.quantity}\n`;
+            });
+
+            message += `\nTotal: R$ ${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = '1234567890'; // Substitua pelo número de telefone com o qual deseja enviar a mensagem
+            const url = `https://wa.me/${553499787263}?text=${encodedMessage}`;
+
+            window.open(url, '_blank');
+        }
+
+        updateCart();
+    </script>
+</body>
+</html>
